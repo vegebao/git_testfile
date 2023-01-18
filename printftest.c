@@ -25,6 +25,11 @@ int memcpy()
   return 0;
 }
 
+int new_func()
+{
+  return 0;
+}
+
 int main(){
   int a=myprintf();
   int b=mysprintf();
