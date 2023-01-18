@@ -15,6 +15,11 @@ int myprintf()
   return 0;
 }
 
+int memset()
+{
+  return 0;
+}
+
 int main(){
   int a=myprintf();
   int b=mysprintf();
