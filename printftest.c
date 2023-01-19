@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<assert.h>
+#include<stdarg.h>
 
 enum{CHAR,INT,
   STRING, NO_SPECIFIER
@@ -69,6 +70,12 @@ void change_unsigned_to_char(unsigned s, char* d)
     i++;
   }while(s!=0);
   d[i]='\0';
+  for(int h=0;h<i-1-h;h++)
+  {
+    char temp=d[h];
+    d[h]=d[i-1-h];
+    d[i-1-h]=temp;
+  }
 }
 
 void check_flag(const char *a, int *position, num_format *table)
@@ -98,9 +105,12 @@ void check_flag(const char *a, int *position, num_format *table)
     }
     default:{
       table->flag[t]='N';
+      t++;
       break;
     }
     }
+    if(table->flag[t-1]=='N')
+      break;
   }
 }
 
@@ -136,13 +146,6 @@ void check_width(const char *a, int *position,num_format *table)
     if(ls[0]!='N')
     {
       table->width='x';
-      int num=strlen(ls);
-      for(int i=0;i<num-1-i;i++)
-      {
-        char temp=ls[i];
-        ls[i]=ls[num-i-1];
-        ls[num-i-1]=temp;
-      }
       table->wid_value=change_char_to_int(ls);
     }
     else{
@@ -270,7 +273,7 @@ int myvsprintf(char *out, const char *fmt, va_list ap) {
         }
         case CHAR:
         {
-          char t=va_arg(ap,char);
+          char t=va_arg(ap,int);
           out[position2]=t;
           position2++;
           num++;
@@ -300,14 +303,14 @@ int myvsprintf(char *out, const char *fmt, va_list ap) {
 int mysprintf(char *out, const char *fmt, ...) {
   va_list ap;
   va_start(ap,fmt);
-  return vsprintf(out,fmt,ap);
+  return myvsprintf(out,fmt,ap);
 }
 
 int main()
 {
-  int a=10;
+  int a=980;
   char str[30];
-  mysprintf(" this is  %05d ",a);
-  printf("%s\n",str);
+  int h=mysprintf(str, " this is  %d ",a);
+  printf("%s   num is %d\n",str,h);
   return 0;
 }
